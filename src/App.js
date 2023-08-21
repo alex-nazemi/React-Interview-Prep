@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import questionsAndAnswers from "./QuestionsAndAnswers";
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const getRandomChoice = () => Math.floor(Math.random() * questionsAndAnswers.length);
+
+  let initialChoice = getRandomChoice();
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [question, setQuestion] = useState(questionsAndAnswers[initialChoice].question);
+  const [answer, setAnswer] = useState(questionsAndAnswers[initialChoice].answer);
+
+  const handleClick = (event) => {
+    if (event.target.value === "show-answer") {
+      setShowAnswer(true);
+    } else if (event.target.value === "next-question") {
+      let newChoice = getRandomChoice();
+      setQuestion(questionsAndAnswers[newChoice].question);
+      setAnswer(questionsAndAnswers[newChoice].answer);
+      setShowAnswer(false);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>{question}</p>
+      {showAnswer && <p>{answer}</p>} 
+      <button onClick={handleClick} value="show-answer">
+        Show Answer
+      </button>
+      <button onClick={handleClick} value="next-question">
+        Next Question
+      </button>
     </div>
   );
 }
